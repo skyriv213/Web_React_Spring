@@ -8,6 +8,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/***
+ * ResponseDTO / ResponseEntity의 리턴을 비교할 시
+ * 리턴이 된 body에는 차이가 없다.
+ * 둘의 차이는 단지 정보를 담고 있는 헤더와 HTTP status를 조작할 수 있다는 점이다.
+ * @param <T>
+ */
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
