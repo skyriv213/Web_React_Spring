@@ -7,6 +7,7 @@ class App extends React.Component{
     return(
       <div className="App">
         <Todo />
+        <Todo />
       </div>
     );
   }
