@@ -12,13 +12,20 @@ export function call(api, method, request) {
         // GET method
         options.body = JSON.stringify(request);
     }
-    return fetch(options.url, options).then(response => 
-        response.json().then((json) => {
-        if (!response.ok) {
-            // reqsponse.ok 가 true 이면 정상적 응답. 아닐경우 에러 응답
-            return Promise.reject(json);
-        }
-        return json;
-    })
-    );
+    return fetch(options.url, options)
+        .then(response =>
+            response.json().then((json) => {
+                if (!response.ok) {
+                    // reqsponse.ok 가 true 이면 정상적 응답. 아닐경우 에러 응답
+                    return Promise.reject(json);
+                }
+                return json;
+            })
+        ).catch((error) => {    
+            console.log(error.status);
+            if (error.status === 403){
+                window.location.href = "/login"; // redirect to login page
+            }
+            return Promise.reject(error);
+        });
 }
