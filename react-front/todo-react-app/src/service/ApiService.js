@@ -1,3 +1,4 @@
+import { responsiveFontSizes } from "@material-ui/core";
 import { API_BASE_URL } from "../app-config";
 
 export function call(api, method, request) {
@@ -28,4 +29,12 @@ export function call(api, method, request) {
             }
             return Promise.reject(error);
         });
+}
+export  function signin(userDTO){
+    return call("/auth/signin", "POST",userDTO)
+    .then((response)=>{
+        if(response.token){
+            window.location.href = "/"; // redirect to login page
+        }
+    });
 }

@@ -38,8 +38,9 @@ public class UserController {
             UserEntity user = UserEntity.builder()
                     .email(userDTO.getEmail())
                     .username(userDTO.getUsername())
-                    .password(userDTO.getPassword())
+                    .password(passwordEncoder.encode(userDTO.getPassword()))
                     .build();
+
             // 서비스를 이용해 repository에 저장
             UserEntity registeredUser = userService.create(user);
             UserDTO responseUserDTO = UserDTO.builder()
@@ -48,6 +49,7 @@ public class UserController {
                     .username(registeredUser.getUsername())
                     .build();
             return ResponseEntity.ok(responseUserDTO);
+
         } catch (Exception e) {
             // 사용자 정보는 항상 하나이므로 리스트로 만들어야하는 ResponseDTO를 사용하지않고 UserDTO 리턴
             ResponseDTO responseDTO = ResponseDTO.builder().error(e.getMessage()).build();

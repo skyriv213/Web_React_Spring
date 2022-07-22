@@ -32,25 +32,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         http.cors()
                 .and()
                 .csrf()// csrf는 현재 사용하지 않으므로 disable
-                .disable()
+                    .disable()
                 .httpBasic() // token을 사용하므로 basic 인증 disable
-                .disable()
+                    .disable()
                 .sessionManagement() // session기반이 아님
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(
+                    .antMatchers(
                         "/", "/auth/**" // 경로는 인증을 안해도 됨
-                ).permitAll()
+                    ).permitAll()
                 .anyRequest()// 위의 antMatcher의 경로를 제외하고는 모든 경로는 인증해야함
-                .authenticated();
+                    .authenticated();
 
         // filter 등록
         // 매 요청마다
         // CorsFilter 실행 후
         // jwtAutenticationFilter를 실행한다.
         http.addFilterAfter(
-                jwtAuthenticationFilter, CorsFilter.class
+                jwtAuthenticationFilter,
+                CorsFilter.class
         );
 
     }

@@ -4,7 +4,6 @@ import AddTodo from "./AddTodo.js";
 import { Paper, List, Container } from "@material-ui/core";
 import "./App.css";
 import { call } from "./service/ApiService";
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -13,23 +12,22 @@ class App extends React.Component {
     };
   }
 
+  componentDidMount() {
+    call("/todo", "GET", null).then((response) =>
+      this.setState({ items: response.data })
+    );
+  }
+
   add = (item) => {
-    const thisItems = this.state.items;
-    item.id = "ID-" + thisItems.length; // key를 위한 id추가
-    item.done = false; // done 초기화
-    thisItems.push(item); // 배열에 아이템 추가
-    this.setState({ items: thisItems }); // 업데이트는 반드시 this.setState로 해야됨.
-    console.log("items : ", this.state.items);
+    call("/todo", "POST", item).then((response) =>
+      this.setState({ items: response.data })
+    );
   };
 
   delete = (item) => {
-    const thisItems = this.state.items;
-    console.log("Before Update Items : ", this.state.items);
-    const newItems = thisItems.filter((e) => e.id !== item.id); // 해당 id 걸러내기
-    this.setState({ items: newItems }, () => {
-      // 디버깅 콜백
-      console.log("Update Items : ", this.state.items);
-    });
+    call("/todo", "DELETE", item).then((response) =>
+      this.setState({ items: response.data })
+    );
   };
 
   update = (item) => {
@@ -37,8 +35,6 @@ class App extends React.Component {
       this.setState({ items: response.data })
     );
   };
-
-
 
   render() {
     var todoItems = this.state.items.length > 0 && (
@@ -66,44 +62,6 @@ class App extends React.Component {
       </div>
     );
   }
-
-  componentDidMount() {
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-
-    fetch("http://localhost:8080/todo", requestOptions)
-      .then((response) => response.json())
-      .then(
-        (response) => {
-          this.setState({
-            items: response.data,
-          });
-        },
-        (error) => {
-          this.setState({
-            error,
-          });
-        }
-      );
-
-  }
-  componentDidMount() {
-    call("/todo", "GET", null).then((response) =>
-      this.setState({ items: response.data })
-    );
-  }
-  add = (item) => {
-    call("/todo", "POST", item).then((response) =>
-      this.setState({ items: response.data })
-    );
-  }
-  delete = (item) => {
-    call("/todo", "DELETE", item).then((response) =>
-      this.setState({ items: response.data })
-    );
-  };
 }
 
 export default App;
